@@ -6,7 +6,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getListProduct } from "../actions/productActions";
 
-const Home = () => {
+const HomeScreen = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -35,4 +35,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default HomeScreen;
