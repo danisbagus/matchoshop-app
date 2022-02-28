@@ -5,7 +5,7 @@ const axiosApi = axios.create({
   timeout: 20000,
 });
 
-// axiosApi.defaults.headers["Content-Type"] = "application/json";
+axiosApi.defaults.headers["Content-Type"] = "application/json";
 // axiosApi.defaults.headers.common.Authorization = `Bearer ${
 //   store.getState().userLogin.userInfo.access_token || ""
 // }`;
