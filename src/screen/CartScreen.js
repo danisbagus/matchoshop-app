@@ -34,7 +34,6 @@ const CartScreen = ({ match, location, history }) => {
   };
 
   const checkoutHandler = (id) => {
-    // dispatch(removeFromCart(id));
     history.push("/login?redirect=shipping");
   };
 
@@ -63,7 +62,6 @@ const CartScreen = ({ match, location, history }) => {
                       as="select"
                       value={item.qty}
                       onChange={(e) => {
-                        console.log(Number(e.target.value));
                         dispatch(
                           addToCart(item.product, Number(e.target.value))
                         );
