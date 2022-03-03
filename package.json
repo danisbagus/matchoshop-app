@@ -1,6 +1,5 @@
 {
   "name": "matchoshop-app",
-  "proxy": "https://matchoshop.herokuapp.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
