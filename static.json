@@ -10,6 +10,9 @@
     "proxies": {
       "/api/": {
         "origin": "https://matchoshop.herokuapp.com/"
+      },
+      "/auth": {
+        "origin": "https://matchoshop.herokuapp.com"
       }
     }
   }
