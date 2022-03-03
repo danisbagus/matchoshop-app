@@ -1,7 +1,11 @@
 {
-    "root": "build/",
+    "root": "dist/",
     "routes": {
       "/**": "index.html"
+    },
+    "logging": {
+      "access": false,
+      "error": "warn"
     },
     "proxies": {
       "/api/": {
