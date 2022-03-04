@@ -3,10 +3,16 @@
     "routes": {
       "/**": "index.html"
     },
+    "logging": {
+      "access": false,
+      "error": "warn"
+    },
     "proxies": {
       "/api/": {
-        "origin": "${API_URL}"
+        "origin": "${API_URL}/api"
+      },
+      "/auth/": {
+        "origin": "${API_URL}/auth"
       }
     }
   }
-  
