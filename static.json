@@ -12,7 +12,7 @@
         "origin": "https://matchoshop.herokuapp.com/api"
       },
       "/auth/": {
-        "origin": "https://matchoshop.herokuapp.com/auth"
+        "origin": "${API_URL}/auth"
       }
     }
   }
