@@ -1,9 +1,9 @@
-FROM node:alpine AS build
+FROM node:14.15-alpine3.12 
 COPY . .
-RUN npm install
+Run npm cache verify
+RUN npm install --no-package-lock
 RUN npm run build
-
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates
-COPY --from=build /build ./web
+RUN npm install -g serve
+CMD ["serve", "-s", "build"]
 EXPOSE 8080
+
