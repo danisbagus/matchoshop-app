@@ -9,10 +9,10 @@
     },
     "proxies": {
       "/api/": {
-        "origin": "https://matchoshop.herokuapp.com/"
+        "origin": "https://matchoshop.herokuapp.com/api/"
       },
-      "/auth": {
-        "origin": "https://matchoshop.herokuapp.com"
+      "/auth/": {
+        "origin": "https://matchoshop.herokuapp.com/auth/"
       }
     }
   }
