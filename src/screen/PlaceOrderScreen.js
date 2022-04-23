@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import { Button, Row, Col, ListGroup, Image, Card } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
+import { createOrder } from "../actions/orderActions";
 
-function PlaceOrderScreen() {
+function PlaceOrderScreen({ history }) {
+  const dispatch = useDispatch();
   const cart = useSelector((state) => state.cart);
 
   cart.itemsPrice = cart.cartItems.reduce(
@@ -22,9 +24,41 @@ function PlaceOrderScreen() {
     Number(cart.shippingPrice) +
     Number(cart.taxPrice);
 
-  const placeOrderHandler = (e) => {
-    e.preventDefault();
-    console.log("submit");
+  const orderCreate = useSelector((state) => state.orderCreate);
+  const { order, success, error } = orderCreate;
+
+  useEffect(() => {
+    if (success) {
+      history.push(`/order/${order.order_id}`);
+    }
+    // eslint-disable-next-line
+  }, [history, success]);
+
+  const placeOrderHandler = () => {
+    const cartItems = cart.cartItems.map((item) => {
+      return {
+        product_id: item.product,
+        quantity: item.qty,
+      };
+    });
+
+    const orderData = {
+      order_product: cartItems,
+      payment_method_id: 1,
+      product_price: cart.itemsPrice,
+      tax_price: cart.taxPrice,
+      shipping_price: cart.shippingPrice,
+      total_price: cart.totalPrice,
+      shipment_address: {
+        address: cart.shippingAddress.address,
+        city: cart.shippingAddress.city,
+        country: cart.shippingAddress.country,
+        postal_code: cart.shippingAddress.postalCode,
+      },
+    };
+
+    dispatch(createOrder(orderData));
+    console.log(orderData);
   };
   return (
     <>
@@ -50,7 +84,7 @@ function PlaceOrderScreen() {
 
             <ListGroup.Item>
               <h2>Order Items</h2>
-              {cart.cartItems.length == 0 ? (
+              {cart.cartItems.length === 0 ? (
                 <Message>Your cart is empty</Message>
               ) : (
                 <ListGroup>
@@ -111,6 +145,9 @@ function PlaceOrderScreen() {
                   <Col>Total</Col>
                   <Col>Rp{cart.totalPrice}</Col>
                 </Row>
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {error && <Message variant="danger">{error}</Message>}
               </ListGroup.Item>
               <ListGroup.Item>
                 <Button
