@@ -11,10 +11,12 @@ import {
   USER_DETAIL_REQUEST,
   USER_DETAIL_SUCCESS,
   USER_DETAIL_FAIL,
+  USER_DETAIL_RESET,
   USER_UPDATE_PROFILE_REQUEST,
   USER_UPDATE_PROFILE_SUCCESS,
   USER_UPDATE_PROFILE_FAIL,
 } from "../constants/userConstants";
+import { ORDER_LIST_MY_RESET } from "../constants/orderConstants";
 
 export const login = (email, password) => async (dispatch) => {
   try {
@@ -22,7 +24,10 @@ export const login = (email, password) => async (dispatch) => {
       type: USER_LOGIN_REQUEST,
     });
 
-    const { data } = await axios.post("/auth/v1/login", { email, password });
+    const { data } = await axios.post("/api/v1/auth/login", {
+      email,
+      password,
+    });
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
@@ -42,6 +47,8 @@ export const login = (email, password) => async (dispatch) => {
 export const logout = () => (dispatch) => {
   localStorage.removeItem("userInfo");
   dispatch({ type: USER_LOGOUT });
+  dispatch({ type: USER_DETAIL_RESET });
+  dispatch({ type: ORDER_LIST_MY_RESET });
 };
 
 export const register =
@@ -51,7 +58,7 @@ export const register =
         type: USER_REGISTER_REQUEST,
       });
 
-      const { data } = await axios.post("/auth/v1/register/customer", {
+      const { data } = await axios.post("/api/v1/auth/register/customer", {
         email,
         name,
         password,
@@ -131,20 +138,6 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data.data || [],
     });
-
-    // const userData = {
-    //   ...userInfo,
-    //   name: data.data.name || "",
-    //   email: data.data.email || "",
-    //   role_id: data.data.role_id || "",
-    // };
-
-    // dispatch({
-    //   type: USER_LOGIN_SUCCESS,
-    //   payload: userData,
-    // });
-
-    // localStorage.setItem("userInfo", JSON.stringify(userData));
   } catch (error) {
     console.log(error.response.data.message || error.message);
     dispatch({
