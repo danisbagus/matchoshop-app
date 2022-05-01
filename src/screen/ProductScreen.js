@@ -42,7 +42,16 @@ const ProductScreen = ({ history, match }) => {
       ) : (
         <Row>
           <Col md={6}>
-            <Image src={product.image} alt={product.name} fluid />
+            <Image
+              src={product.image}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src =
+                  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+              }}
+              alt={product.name}
+              fluid
+            />
           </Col>
           <Col md={3}>
             <ListGroup variant="flush">
@@ -101,15 +110,16 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 )}
 
-                <ListGroup.Item>
-                  <Button
-                    onClick={addToCartHandler}
-                    className="btn-block"
-                    type="button"
-                    disabled={product.stock < 0}
-                  >
-                    Add To Cart
-                  </Button>
+                <ListGroup.Item className="text-center">
+                  <div className="d-grid gap-2">
+                    <Button
+                      onClick={addToCartHandler}
+                      type="button"
+                      disabled={product.stock < 0}
+                    >
+                      Add To Cart
+                    </Button>
+                  </div>
                 </ListGroup.Item>
               </ListGroup>
             </Card>
