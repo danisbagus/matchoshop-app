@@ -61,7 +61,7 @@ function ProfileScreen({ location, history }) {
   return (
     <Row>
       <Col md={3}>
-        <h2>User Profile</h2>
+        <h3>User Profile</h3>
         {error && <Message variant="danger">{error}</Message>}
         {success && <Message variant="success">{"Profile updated"}</Message>}
         {loading && <Loader />}
@@ -97,57 +97,65 @@ function ProfileScreen({ location, history }) {
           </Button>
         </Form>
       </Col>
-      <Col md={9}>
-        <h2>My Orders</h2>
-        {loadingOrders ? (
-          <Loader />
-        ) : errorOrders ? (
-          <Message variant="danger">{errorOrders}</Message>
-        ) : (
-          <Table striped bordered hover responsive className="table-sm">
-            <thead>
-              <tr>
-                <th>ID</th>
-                <th>DATE</th>
-                <th>TOTAL</th>
-                <th>PAID</th>
-                <th>DELIVERED</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody>
-              {orders.map((order) => (
-                <tr key={order.order_id}>
-                  <td>{order.order_id}</td>
-                  <td>{order.created_at.substring(0, 10)}</td>
-                  <td>{order.total_price}</td>
-                  <td>
-                    {order.is_paid ? (
-                      order.paid_at.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    {order.is_delivered ? (
-                      order.deliverd_at.substring(0, 10)
-                    ) : (
-                      <i className="fas fa-times" style={{ color: "red" }}></i>
-                    )}
-                  </td>
-                  <td>
-                    <LinkContainer to={`/order/${order.order_id}`}>
-                      <Button className="btn-sm" variant="light">
-                        Details
-                      </Button>
-                    </LinkContainer>
-                  </td>
+      {userInfo && (userInfo.role === 1 || userInfo === 2) && (
+        <Col md={9}>
+          <h3>My Orders</h3>
+          {loadingOrders ? (
+            <Loader />
+          ) : errorOrders ? (
+            <Message variant="danger">{errorOrders}</Message>
+          ) : (
+            <Table striped bordered hover responsive className="table-sm">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>DATE</th>
+                  <th>TOTAL</th>
+                  <th>PAID</th>
+                  <th>DELIVERED</th>
+                  <th></th>
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        )}
-      </Col>
+              </thead>
+              <tbody>
+                {orders.map((order) => (
+                  <tr key={order.order_id}>
+                    <td>{order.order_id}</td>
+                    <td>{order.created_at.substring(0, 10)}</td>
+                    <td>{order.total_price}</td>
+                    <td>
+                      {order.is_paid ? (
+                        order.paid_at.substring(0, 10)
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      {order.is_delivered ? (
+                        order.deliverd_at.substring(0, 10)
+                      ) : (
+                        <i
+                          className="fas fa-times"
+                          style={{ color: "red" }}
+                        ></i>
+                      )}
+                    </td>
+                    <td>
+                      <LinkContainer to={`/order/${order.order_id}`}>
+                        <Button className="btn-sm" variant="light">
+                          Details
+                        </Button>
+                      </LinkContainer>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          )}
+        </Col>
+      )}
     </Row>
   );
 }

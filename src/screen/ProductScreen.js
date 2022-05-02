@@ -20,6 +20,9 @@ const ProductScreen = ({ history, match }) => {
 
   const dispatch = useDispatch();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
     dispatch(getDetailProduct(match.params.id));
   }, [match, dispatch]);
@@ -95,6 +98,10 @@ const ProductScreen = ({ history, match }) => {
                       <Col>Qty</Col>
                       <Col>
                         <Form.Select
+                          disabled={
+                            userInfo &&
+                            (userInfo.role_id === 1 || userInfo.role_id === 2)
+                          }
                           as="select"
                           value={qty}
                           onChange={(e) => setQty(e.target.value)}
@@ -110,17 +117,19 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 )}
 
-                <ListGroup.Item className="text-center">
-                  <div className="d-grid gap-2">
-                    <Button
-                      onClick={addToCartHandler}
-                      type="button"
-                      disabled={product.stock < 0}
-                    >
-                      Add To Cart
-                    </Button>
-                  </div>
-                </ListGroup.Item>
+                {!(userInfo.role_id === 1 || userInfo.role_id === 2) && (
+                  <ListGroup.Item className="text-center">
+                    <div className="d-grid gap-2">
+                      <Button
+                        onClick={addToCartHandler}
+                        type="button"
+                        disabled={product.stock < 0}
+                      >
+                        Add To Cart
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                )}
               </ListGroup>
             </Card>
           </Col>
