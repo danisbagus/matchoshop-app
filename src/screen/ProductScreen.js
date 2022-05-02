@@ -15,6 +15,9 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getDetailProduct } from "../actions/productActions";
 
+const defaultImage =
+  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+
 const ProductScreen = ({ history, match }) => {
   const [qty, setQty] = useState(1);
 
@@ -46,11 +49,10 @@ const ProductScreen = ({ history, match }) => {
         <Row>
           <Col md={6}>
             <Image
-              src={product.image}
+              src={product.image || defaultImage}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null; // prevents looping
-                currentTarget.src =
-                  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+                currentTarget.src = defaultImage;
               }}
               alt={product.name}
               fluid

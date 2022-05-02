@@ -3,6 +3,9 @@ import { Link } from "react-router-dom";
 import { Card } from "react-bootstrap";
 import Rating from "./Rating";
 
+const defaultImage =
+  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+
 const Product = ({ data }) => {
   return (
     <Card className="px-2 py-4 rounded h-100">
@@ -10,11 +13,10 @@ const Product = ({ data }) => {
         <div className="container">
           <div class="col-md-12">
             <Card.Img
-              src={data.image}
+              src={data.image || defaultImage}
               onError={({ currentTarget }) => {
                 currentTarget.onerror = null; // prevents looping
-                currentTarget.src =
-                  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+                currentTarget.src = defaultImage;
               }}
               variant="top"
             />
