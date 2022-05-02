@@ -40,7 +40,7 @@ const CartScreen = ({ match, location, history }) => {
   return (
     <Row>
       <Col md={8}>
-        <h1>Shopping Cart</h1>
+        <h3>Shopping Cart</h3>
         {cartItems.length === 0 ? (
           <Message>
             <Link to="/">Go back</Link>Your card is empty

@@ -97,7 +97,7 @@ function ProfileScreen({ location, history }) {
           </Button>
         </Form>
       </Col>
-      {userInfo && (userInfo.role === 1 || userInfo === 2) && (
+      {!(userInfo.role_id === 1 || userInfo.role_id === 2) && (
         <Col md={9}>
           <h3>My Orders</h3>
           {loadingOrders ? (
