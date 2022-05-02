@@ -19,7 +19,7 @@ const UserListScreen = ({ history }) => {
   const { success: successDelete } = userDelete;
 
   useEffect(() => {
-    if (userInfo && (userInfo.role_id === 1 || userInfo.role_id === 2)) {
+    if (isAdmin()) {
       dispatch(getUserList());
     } else {
       history.push("/login");
@@ -44,6 +44,13 @@ const UserListScreen = ({ history }) => {
       return false;
     }
     return true;
+  };
+
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
   };
 
   return (

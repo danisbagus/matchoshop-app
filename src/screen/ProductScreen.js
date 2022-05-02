@@ -37,6 +37,13 @@ const ProductScreen = ({ history, match }) => {
     history.push(`/cart/${match.params.id}?qty=${qty}`);
   };
 
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
+  };
+
   return (
     <>
       <Link className="btn btn-dark my-3" to="/">
@@ -94,32 +101,37 @@ const ProductScreen = ({ history, match }) => {
                   </Row>
                 </ListGroup.Item>
 
-                {product.stock && (
-                  <ListGroup.Item>
-                    <Row>
-                      <Col>Qty</Col>
-                      <Col>
-                        <Form.Select
-                          disabled={
-                            userInfo &&
-                            (userInfo.role_id === 1 || userInfo.role_id === 2)
-                          }
-                          as="select"
-                          value={qty}
-                          onChange={(e) => setQty(e.target.value)}
-                        >
-                          {[...Array(product.stock).keys()].map((x) => (
-                            <option key={x + 1} value={x + 1}>
-                              {x + 1}
-                            </option>
-                          ))}
-                        </Form.Select>
-                      </Col>
-                    </Row>
-                  </ListGroup.Item>
-                )}
+                <ListGroup.Item>
+                  <Row>
+                    {product.stock > 0 && !isAdmin() && (
+                      <>
+                        <Col>Qty</Col>
+                        <Col>
+                          <Form.Select
+                            disabled={isAdmin()}
+                            as="select"
+                            value={qty}
+                            onChange={(e) => setQty(e.target.value)}
+                          >
+                            {[...Array(product.stock).keys()].map((x) => (
+                              <option key={x + 1} value={x + 1}>
+                                {x + 1}
+                              </option>
+                            ))}
+                          </Form.Select>
+                        </Col>
+                      </>
+                    )}
+                    {(product.stock == 0 || isAdmin()) && (
+                      <>
+                        <Col>Stock</Col>
+                        <Col> {product.stock}</Col>
+                      </>
+                    )}
+                  </Row>
+                </ListGroup.Item>
 
-                {!(userInfo.role_id === 1 || userInfo.role_id === 2) && (
+                {product.stock > 0 && !isAdmin() && (
                   <ListGroup.Item className="text-center">
                     <div className="d-grid gap-2">
                       <Button

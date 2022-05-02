@@ -27,7 +27,7 @@ const ProductListScreen = ({ history, match }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (!userInfo || !(userInfo.role_id === 1 || userInfo.role_id === 2)) {
+    if (!isAdmin()) {
       history.push("/login");
     }
 
@@ -56,6 +56,13 @@ const ProductListScreen = ({ history, match }) => {
     });
 
     return names;
+  };
+
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
   };
 
   return (

@@ -14,6 +14,13 @@ const Header = () => {
     dispatch(logout());
   };
 
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
+  };
+
   return (
     <header>
       <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
@@ -51,7 +58,7 @@ const Header = () => {
                   </Nav.Link>
                 </LinkContainer>
               )}
-              {userInfo && (userInfo.role_id === 1 || userInfo.role_id === 2) && (
+              {isAdmin() && (
                 <NavDropdown title="Admin" id="adminmenu">
                   <LinkContainer to="/admin/userlist">
                     <NavDropdown.Item>Users</NavDropdown.Item>

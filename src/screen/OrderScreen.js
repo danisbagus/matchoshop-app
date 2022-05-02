@@ -64,12 +64,7 @@ const OrderScreen = ({ match, history }) => {
     if (!order || successPay || successDeliver || order.order_id != orderId) {
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
-      dispatch(
-        getOrderDetails(
-          orderId,
-          userInfo && (userInfo.role_id === 1 || userInfo.role_id === 2)
-        )
-      );
+      dispatch(getOrderDetails(orderId, isAdmin()));
     } else if (!order.is_paid) {
       if (!window.paypal) {
         addPayPalScript();
@@ -92,6 +87,13 @@ const OrderScreen = ({ match, history }) => {
 
   const deliverHandler = () => {
     dispatch(deliverOrder(orderId));
+  };
+
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
   };
 
   return loading ? (
@@ -205,33 +207,29 @@ const OrderScreen = ({ match, history }) => {
                   <Col>Rp{order.total_price}</Col>
                 </Row>
               </ListGroup.Item>
-              {!(userInfo.role_id === 1 || userInfo.role_id === 2) &&
-                !order.is_paid && (
-                  <ListGroup.Item>
-                    {loadingPay && <Loader />}
-                    {!sdkReady ? (
-                      <Loader />
-                    ) : (
-                      <PayPalButton
-                        amount={order.total_price}
-                        onSuccess={successPaymentHandler}
-                      />
-                    )}
-                  </ListGroup.Item>
-                )}
+              {!isAdmin() && !order.is_paid && (
+                <ListGroup.Item>
+                  {loadingPay && <Loader />}
+                  {!sdkReady ? (
+                    <Loader />
+                  ) : (
+                    <PayPalButton
+                      amount={order.total_price}
+                      onSuccess={successPaymentHandler}
+                    />
+                  )}
+                </ListGroup.Item>
+              )}
               {loadingDeliver && <Loader />}
-              {userInfo &&
-                (userInfo.role_id === 1 || userInfo.role_id === 2) &&
-                order.is_paid &&
-                !order.is_delivered && (
-                  <ListGroup.Item>
-                    <div className="d-grid gap-2">
-                      <Button onClick={deliverHandler} type="button">
-                        Mark As Delivered
-                      </Button>
-                    </div>
-                  </ListGroup.Item>
-                )}
+              {isAdmin() && order.is_paid && !order.is_delivered && (
+                <ListGroup.Item>
+                  <div className="d-grid gap-2">
+                    <Button onClick={deliverHandler} type="button">
+                      Mark As Delivered
+                    </Button>
+                  </div>
+                </ListGroup.Item>
+              )}
             </ListGroup>
           </Card>
         </Col>

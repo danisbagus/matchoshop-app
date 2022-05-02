@@ -16,12 +16,19 @@ const OrderListScreen = ({ history }) => {
   const { userInfo } = userLogin;
 
   useEffect(() => {
-    if (!userInfo || !(userInfo.role_id === 1 || userInfo.role_id === 2)) {
+    if (!isAdmin()) {
       history.push("/login");
     } else {
       dispatch(listOrders());
     }
   }, [dispatch, history, userInfo]);
+
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
+  };
 
   return (
     <>

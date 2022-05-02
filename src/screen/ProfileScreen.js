@@ -58,6 +58,13 @@ function ProfileScreen({ location, history }) {
     }
   };
 
+  const isAdmin = () => {
+    if (!userInfo) {
+      return false;
+    }
+    return userInfo.role_id === 1 || userInfo.role_id === 2;
+  };
+
   return (
     <Row>
       <Col md={3}>
@@ -97,7 +104,7 @@ function ProfileScreen({ location, history }) {
           </Button>
         </Form>
       </Col>
-      {!(userInfo.role_id === 1 || userInfo.role_id === 2) && (
+      {!isAdmin() && (
         <Col md={9}>
           <h3>My Orders</h3>
           {loadingOrders ? (
