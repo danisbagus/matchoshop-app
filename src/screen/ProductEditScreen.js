@@ -45,13 +45,11 @@ const ProductEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET });
-      history.push("/admin/productlist");
+      dispatch(getDetailProduct(productId));
     } else {
       dispatch(getListProductCategory());
 
-      if (!product.name || product.product_id != productId) {
-        dispatch(getDetailProduct(productId));
-      } else {
+      if (product.name && product.product_id === parseInt(productId)) {
         setName(product.name);
         setSku(product.sku);
         setPrice(product.price);
@@ -60,6 +58,8 @@ const ProductEditScreen = ({ match, history }) => {
         setCategory(getCategoryId());
         setStock(product.stock);
         setDescription(product.description);
+      } else {
+        dispatch(getDetailProduct(productId));
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);
@@ -121,7 +121,7 @@ const ProductEditScreen = ({ match, history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Edit Product</h1>
+        <h3>Edit Product</h3>
         {loadingUpdate && <Loader />}
         {errorUpdate && <Message variant="danger">{errorUpdate}</Message>}
         {loadingProductCategory && <Loader />}

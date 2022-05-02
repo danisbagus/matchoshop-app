@@ -5,7 +5,7 @@ import Rating from "./Rating";
 
 const Product = ({ data }) => {
   return (
-    <Card className="mx-3 p-3 rounded h-100">
+    <Card className="px-2 py-4 rounded h-100">
       <Link to={`/product/${data.product_id}`}>
         <div className="container">
           <div class="col-md-12">
@@ -32,7 +32,7 @@ const Product = ({ data }) => {
         <Card.Text as="div">
           <Rating value={data.rating} text={`${data.numb_reviews} reviews`} />
         </Card.Text>
-        <Card.Text as="h3">Rp{data.price}</Card.Text>
+        <Card.Text as="h4">Rp{data.price}</Card.Text>
       </Card.Body>
     </Card>
   );

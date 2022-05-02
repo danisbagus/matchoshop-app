@@ -93,7 +93,7 @@ const ProductCreateScreen = ({ history }) => {
         Go Back
       </Link>
       <FormContainer>
-        <h1>Creater Product</h1>
+        <h3>Create Product</h3>
         {loadingCreate && <Loader />}
         {errorCreate && <Message variant="danger">{errorCreate}</Message>}
         {loadingProductCategory && <Loader />}
@@ -187,7 +187,7 @@ const ProductCreateScreen = ({ history }) => {
           </Form.Group>
 
           <Button className="mt-3" type="submit" variant="primary">
-            Add
+            Create
           </Button>
         </Form>
       </FormContainer>
