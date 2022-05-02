@@ -5,9 +5,21 @@ import Rating from "./Rating";
 
 const Product = ({ data }) => {
   return (
-    <Card className="my-3 p-3 rounded">
+    <Card className="px-2 py-4 rounded h-100">
       <Link to={`/product/${data.product_id}`}>
-        <Card.Img src={data.image} variant="top" />
+        <div className="container">
+          <div class="col-md-12">
+            <Card.Img
+              src={data.image}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src =
+                  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+              }}
+              variant="top"
+            />
+          </div>
+        </div>
       </Link>
 
       <Card.Body>
@@ -20,7 +32,7 @@ const Product = ({ data }) => {
         <Card.Text as="div">
           <Rating value={data.rating} text={`${data.numb_reviews} reviews`} />
         </Card.Text>
-        <Card.Text as="h3">Rp{data.price}</Card.Text>
+        <Card.Text as="h4">Rp{data.price}</Card.Text>
       </Card.Body>
     </Card>
   );

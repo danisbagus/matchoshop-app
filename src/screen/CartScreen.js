@@ -40,7 +40,7 @@ const CartScreen = ({ match, location, history }) => {
   return (
     <Row>
       <Col md={8}>
-        <h1>Shopping Cart</h1>
+        <h3>Shopping Cart</h3>
         {cartItems.length === 0 ? (
           <Message>
             <Link to="/">Go back</Link>Your card is empty
@@ -89,26 +89,27 @@ const CartScreen = ({ match, location, history }) => {
           </ListGroup>
         )}
       </Col>
-      <Col md={4}>
+      <Col md={3}>
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h2>
+              <h3>
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                 items
-              </h2>
+              </h3>
               Rp
               {cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)}
             </ListGroup.Item>
             <ListGroup.Item>
-              <Button
-                type="button"
-                className="btn-block"
-                disable={cartItems.length === 0}
-                onClick={checkoutHandler}
-              >
-                Checkout
-              </Button>
+              <div className="d-grid gap-2">
+                <Button
+                  type="button"
+                  disable={cartItems.length === 0}
+                  onClick={checkoutHandler}
+                >
+                  Checkout
+                </Button>
+              </div>
             </ListGroup.Item>
           </ListGroup>
         </Card>

@@ -18,14 +18,21 @@ const HomeScreen = () => {
 
   return (
     <>
-      <h1>Latest Products</h1>
+      <h3>Latest Products</h3>
       {loading && <Loader />}
       {!loading && error ? (
         <Message variant="danger">{error}</Message>
       ) : (
         <Row>
           {products.map((item) => (
-            <Col key={item.product_id} sm={12} md={6} lg={4} xl={3}>
+            <Col
+              className="mt-4"
+              key={item.product_id}
+              sm={12}
+              md={6}
+              lg={4}
+              xl={3}
+            >
               <Product data={item}></Product>
             </Col>
           ))}

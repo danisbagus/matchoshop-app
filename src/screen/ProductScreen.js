@@ -20,6 +20,9 @@ const ProductScreen = ({ history, match }) => {
 
   const dispatch = useDispatch();
 
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
+
   useEffect(() => {
     dispatch(getDetailProduct(match.params.id));
   }, [match, dispatch]);
@@ -42,7 +45,16 @@ const ProductScreen = ({ history, match }) => {
       ) : (
         <Row>
           <Col md={6}>
-            <Image src={product.image} alt={product.name} fluid />
+            <Image
+              src={product.image}
+              onError={({ currentTarget }) => {
+                currentTarget.onerror = null; // prevents looping
+                currentTarget.src =
+                  "https://res.cloudinary.com/matchoshop/image/upload/v1651389301/matchoshop/default-image_oj7t5b.png";
+              }}
+              alt={product.name}
+              fluid
+            />
           </Col>
           <Col md={3}>
             <ListGroup variant="flush">
@@ -86,6 +98,10 @@ const ProductScreen = ({ history, match }) => {
                       <Col>Qty</Col>
                       <Col>
                         <Form.Select
+                          disabled={
+                            userInfo &&
+                            (userInfo.role_id === 1 || userInfo.role_id === 2)
+                          }
                           as="select"
                           value={qty}
                           onChange={(e) => setQty(e.target.value)}
@@ -101,16 +117,19 @@ const ProductScreen = ({ history, match }) => {
                   </ListGroup.Item>
                 )}
 
-                <ListGroup.Item>
-                  <Button
-                    onClick={addToCartHandler}
-                    className="btn-block"
-                    type="button"
-                    disabled={product.stock < 0}
-                  >
-                    Add To Cart
-                  </Button>
-                </ListGroup.Item>
+                {!(userInfo.role_id === 1 || userInfo.role_id === 2) && (
+                  <ListGroup.Item className="text-center">
+                    <div className="d-grid gap-2">
+                      <Button
+                        onClick={addToCartHandler}
+                        type="button"
+                        disabled={product.stock < 0}
+                      >
+                        Add To Cart
+                      </Button>
+                    </div>
+                  </ListGroup.Item>
+                )}
               </ListGroup>
             </Card>
           </Col>
