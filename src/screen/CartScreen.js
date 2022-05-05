@@ -57,7 +57,9 @@ const CartScreen = ({ match, location, history }) => {
                     <Image src={item.image} alt={item.name} fluid rounded />
                   </Col>
                   <Col md={3}>
-                    <Link to={`/product/${item.product}`}>{item.name}</Link>
+                    <Link className="text-dark" to={`/product/${item.product}`}>
+                      {item.name}
+                    </Link>
                   </Col>
                   <Col md={2}>{item.price}</Col>
                   <Col md={2}>
@@ -92,14 +94,14 @@ const CartScreen = ({ match, location, history }) => {
           </ListGroup>
         )}
       </Col>
-      <Col md={3}>
+      <Col md={4}>
         <Card>
           <ListGroup variant="flush">
             <ListGroup.Item>
-              <h3>
+              <h4>
                 Subtotal ({cartItems.reduce((acc, item) => acc + item.qty, 0)})
                 items
-              </h3>
+              </h4>
               Rp
               {cartItems.reduce((acc, item) => acc + item.qty * item.price, 0)}
             </ListGroup.Item>

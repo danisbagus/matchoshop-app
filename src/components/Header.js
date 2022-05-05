@@ -12,7 +12,6 @@ const Header = () => {
   const { userInfo } = userLogin;
 
   const logoutHandler = () => {
-    console.log("logout");
     dispatch(logout());
   };
 
@@ -59,7 +58,7 @@ const Header = () => {
                 <LinkContainer to="/login">
                   <Nav.Link>
                     <i className="fas fa-user"></i>
-                    Sign In
+                    <span className="px-2"> Sign In</span>
                   </Nav.Link>
                 </LinkContainer>
               )}

@@ -41,7 +41,7 @@ export const login = (email, password) => async (dispatch) => {
 
     dispatch({
       type: USER_LOGIN_SUCCESS,
-      payload: data.data || [],
+      payload: data.data || {},
     });
 
     localStorage.setItem("userInfo", JSON.stringify(data.data));
@@ -82,12 +82,12 @@ export const register =
 
       dispatch({
         type: USER_REGISTER_SUCCESS,
-        payload: data.data || [],
+        payload: data.data || {},
       });
 
       dispatch({
         type: USER_LOGIN_SUCCESS,
-        payload: data.data || [],
+        payload: data.data || {},
       });
 
       localStorage.setItem("userInfo", JSON.stringify(data.data));
@@ -160,6 +160,13 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data.data || [],
     });
+
+    // dispatch({
+    //   type: USER_LOGIN_SUCCESS,
+    //   payload: data.data || {},
+    // });
+
+    // localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     console.log(error.response.data.message || error.message);
     dispatch({
