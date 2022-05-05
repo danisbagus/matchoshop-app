@@ -1,7 +1,9 @@
 import React from "react";
+import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { LinkContainer } from "react-router-bootstrap";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
+import SearchBox from "./SearchBox";
 import { logout } from "../actions/userAction";
 
 const Header = () => {
@@ -23,7 +25,7 @@ const Header = () => {
 
   return (
     <header>
-      <Navbar bg="dark" variant="dark" expand="lg" collapseOnSelect>
+      <Navbar bg="primary" variant="dark" expand="lg" collapseOnSelect>
         <Container>
           <LinkContainer to="/">
             <Navbar.Brand>MatchoShop</Navbar.Brand>
@@ -31,15 +33,18 @@ const Header = () => {
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse
             id="basic-navbar-nav"
-            className="justify-content-end"
+            className="justify-content-between"
           >
-            <Nav>
-              <LinkContainer to="/cart">
-                <Nav.Link>
-                  <i className="fas fa-shopping-cart"></i>
-                  Cart
-                </Nav.Link>
-              </LinkContainer>
+            <Route render={({ history }) => <SearchBox history={history} />} />
+            <Nav className="ml-auto">
+              {!isAdmin() && (
+                <LinkContainer to="/cart">
+                  <Nav.Link>
+                    <i className="fas fa-shopping-cart"></i>
+                    <span className="px-2">Cart</span>
+                  </Nav.Link>
+                </LinkContainer>
+              )}
 
               {userInfo ? (
                 <NavDropdown title={userInfo.name} id="username">
