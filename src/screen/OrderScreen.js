@@ -61,7 +61,12 @@ const OrderScreen = ({ match, history }) => {
       document.body.appendChild(script);
     };
 
-    if (!order || successPay || successDeliver || order.order_id != orderId) {
+    if (
+      !order ||
+      successPay ||
+      successDeliver ||
+      order.order_id !== Number(orderId)
+    ) {
       dispatch({ type: ORDER_PAY_RESET });
       dispatch({ type: ORDER_DELIVER_RESET });
       dispatch(getOrderDetails(orderId, isAdmin()));
@@ -113,7 +118,9 @@ const OrderScreen = ({ match, history }) => {
               </p>
               <p>
                 <strong>Email: </strong>{" "}
-                <a href={`mailto:${order.user_email}`}>{order.user_email}</a>
+                <a className="text-dark" href={`mailto:${order.user_email}`}>
+                  {order.user_email}
+                </a>
               </p>
               <p>
                 <strong>Address:</strong>
@@ -122,7 +129,7 @@ const OrderScreen = ({ match, history }) => {
                 {order.shipment_address.country}
               </p>
               {order.is_delivered ? (
-                <Message variant="success">
+                <Message variant="primary">
                   Delivered on {order.deliverd_at}
                 </Message>
               ) : (
@@ -137,7 +144,7 @@ const OrderScreen = ({ match, history }) => {
                 {order.payment_method_name}
               </p>
               {order.is_paid ? (
-                <Message variant="success">Paid on {order.paid_at}</Message>
+                <Message variant="primary">Paid on {order.paid_at}</Message>
               ) : (
                 <Message variant="danger">Not Paid</Message>
               )}
@@ -146,7 +153,7 @@ const OrderScreen = ({ match, history }) => {
             <ListGroup.Item>
               <h3>Order Items</h3>
               {order.order_product.length === 0 ? (
-                <Message>Order is empty</Message>
+                <Message variant="secondary">Order is empty</Message>
               ) : (
                 <ListGroup variant="flush">
                   {order.order_product.map((item, index) => (
@@ -161,7 +168,10 @@ const OrderScreen = ({ match, history }) => {
                           />
                         </Col>
                         <Col>
-                          <Link to={`/product/${item.product_id}`}>
+                          <Link
+                            className="text-dark"
+                            to={`/product/${item.product_id}`}
+                          >
                             {item.name}
                           </Link>
                         </Col>

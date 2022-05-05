@@ -49,7 +49,7 @@ const ProductEditScreen = ({ match, history }) => {
     } else {
       dispatch(getListProductCategory());
 
-      if (product.name && product.product_id === parseInt(productId)) {
+      if (product.name && product.product_id === Number(productId)) {
         setName(product.name);
         setSku(product.sku);
         setPrice(product.price);
@@ -117,7 +117,7 @@ const ProductEditScreen = ({ match, history }) => {
 
   return (
     <>
-      <Link to="/admin/productlist" className="btn btn-light my-3">
+      <Link to="/admin/productlist" className="btn btn-dark my-3">
         Go Back
       </Link>
       <FormContainer>

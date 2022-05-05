@@ -78,7 +78,9 @@ const UserListScreen = ({ history }) => {
                 <td>{user.user_id}</td>
                 <td>{user.name}</td>
                 <td>
-                  <a href={`mailto:${user.email}`}>{user.email}</a>
+                  <a className="text-dark" href={`mailto:${user.email}`}>
+                    {user.email}
+                  </a>
                 </td>
                 <td>{user.role_name}</td>
                 <td>
