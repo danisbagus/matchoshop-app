@@ -30,7 +30,7 @@ const ProductListScreen = ({ history, match }) => {
       history.push("/login");
     }
 
-    dispatch(getListProduct("", pageNumber));
+    dispatch(getListProduct(true, "", pageNumber));
   }, [dispatch, history, userInfo, successDelete, pageNumber]);
 
   const deleteHandler = (id) => {

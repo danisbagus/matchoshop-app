@@ -45,7 +45,7 @@ const ProductScreen = ({ history, match }) => {
       setRating(0);
       setComment("");
     }
-    dispatch(getDetailProduct(match.params.id));
+    dispatch(getDetailProduct(true, match.params.id));
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
   }, [match, dispatch, successProductReview]);
 
@@ -214,7 +214,7 @@ const ProductScreen = ({ history, match }) => {
                     </ListGroup.Item>
                   ))}
                 <ListGroup.Item>
-                  {!isAdmin() && !isReviewed() && (
+                  {userInfo && !isAdmin() && !isReviewed() && (
                     <>
                       <h4>Add Review</h4>
                       {successProductReview && (
@@ -265,7 +265,7 @@ const ProductScreen = ({ history, match }) => {
                   )}
                   {!userInfo && (
                     <Message>
-                      Please <Link to="/login">sign in</Link> to write a review{" "}
+                      Please <Link to="/login">sign in</Link> to write a review
                     </Message>
                   )}
                 </ListGroup.Item>

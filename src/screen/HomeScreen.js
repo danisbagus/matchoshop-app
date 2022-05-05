@@ -17,7 +17,7 @@ const HomeScreen = ({ match }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getListProduct(keyword, pageNumber));
+    dispatch(getListProduct(false, keyword, pageNumber));
   }, [dispatch, keyword, pageNumber]);
 
   const productList = useSelector((state) => state.productList);

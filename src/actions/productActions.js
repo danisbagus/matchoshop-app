@@ -25,7 +25,7 @@ import {
 } from "../constants/productConstants";
 
 export const getListProduct =
-  (keyword = "", page = 1, limit = 12) =>
+  (isAdmin, keyword = "", page = 1, limit = 12) =>
   async (dispatch, getState) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
@@ -40,7 +40,10 @@ export const getListProduct =
         },
       };
 
-      const url = `api/v1/product?keyword=${keyword}&page=${page}&limit=${limit}`;
+      let url = `api/v1/product?keyword=${keyword}&page=${page}&limit=${limit}`;
+      if (isAdmin) {
+        url = `api/v1/admin/product?keyword=${keyword}&page=${page}&limit=${limit}`;
+      }
       const { data } = await axios.get(url, config);
       dispatch({
         type: PRODUCT_LIST_SUCCESS,
@@ -56,11 +59,25 @@ export const getListProduct =
     }
   };
 
-export const getDetailProduct = (id) => async (dispatch) => {
+export const getDetailProduct = (isAdmin, id) => async (dispatch, getState) => {
   try {
     dispatch({ type: PRODUCT_DETAIL_REQUEST });
 
-    const { data } = await axios.get(`api/v1/product/${id}`);
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.access_token}`,
+      },
+    };
+
+    let url = `api/v1/product/${id}`;
+    if (isAdmin) {
+      url = `api/v1/admin/product/${id}`;
+    }
+    const { data } = await axios.get(url, config);
     dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data.data || {} });
   } catch (error) {
     console.log(error.response.data.message || error.message);
