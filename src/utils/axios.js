@@ -9,14 +9,23 @@ const axiosApi = axios.create({
   timeout: 20000,
 });
 
-const accessToken = getAccessToken();
+// Add a request interceptor
+axiosApi.interceptors.request.use(
+  (config) => {
+    const accessToken = getAccessToken();
+    if (accessToken) {
+      config.headers["Authorization"] = "Bearer " + accessToken;
+    }
+    config.headers["Content-Type"] = "application/json";
+    config.baseURL = "/";
+    return config;
+  },
+  (error) => {
+    Promise.reject(error);
+  }
+);
 
-axiosApi.defaults.headers["Content-Type"] = "application/json";
-
-axiosApi.defaults.headers.common.Authorization = `Bearer ${accessToken}`;
-
-axiosApi.defaults.baseURL = "/";
-
+// Add a response interceptor
 axiosApi.interceptors.response.use(
   (response) => {
     return response;
@@ -26,7 +35,10 @@ axiosApi.interceptors.response.use(
 
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+
       const refreshToken = getRefreshToken();
+      const accessToken = getAccessToken();
+
       return axios
         .post("/api/v1/auth/refresh", {
           access_token: accessToken,
@@ -34,13 +46,12 @@ axiosApi.interceptors.response.use(
         })
         .then((res) => {
           if (res.status === 200 || res.status === 201) {
-            console.log(res.data.data.access_token);
+            const newAccesToken = res.data.data.access_token;
 
-            setToken({ accessToken: res.data.data.access_token, refreshToken });
+            setToken({ accessToken: newAccesToken, refreshToken });
 
-            axios.defaults.headers.common["Authorization"] =
-              "Bearer " + getAccessToken();
-            return axios(originalRequest);
+            axiosApi.defaults.headers.common.Authorization = `Bearer ${newAccesToken}`;
+            return axiosApi(originalRequest);
           }
         });
     }
