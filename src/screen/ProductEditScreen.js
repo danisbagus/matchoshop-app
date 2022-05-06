@@ -45,7 +45,7 @@ const ProductEditScreen = ({ match, history }) => {
   useEffect(() => {
     if (successUpdate) {
       dispatch({ type: PRODUCT_UPDATE_RESET });
-      dispatch(getDetailProduct(false, productId));
+      dispatch(getDetailProduct(true, productId));
     } else {
       dispatch(getListProductCategory());
 
@@ -59,7 +59,7 @@ const ProductEditScreen = ({ match, history }) => {
         setStock(product.stock);
         setDescription(product.description);
       } else {
-        dispatch(getDetailProduct(false, productId));
+        dispatch(getDetailProduct(true, productId));
       }
     }
   }, [dispatch, history, productId, product, successUpdate]);

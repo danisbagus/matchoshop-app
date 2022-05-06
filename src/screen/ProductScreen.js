@@ -45,7 +45,7 @@ const ProductScreen = ({ history, match }) => {
       setRating(0);
       setComment("");
     }
-    dispatch(getDetailProduct(true, match.params.id));
+    dispatch(getDetailProduct(false, match.params.id));
     dispatch({ type: PRODUCT_CREATE_REVIEW_RESET });
   }, [match, dispatch, successProductReview]);
 
