@@ -203,6 +203,11 @@ const ProductScreen = ({ history, match }) => {
               {(!product.reviews || product.reviews.length === 0) && (
                 <Message variant="secondary">No Reviews</Message>
               )}
+              {!userInfo && (
+                <Message>
+                  Please <Link to="/login">sign in</Link> to write a review
+                </Message>
+              )}
               <ListGroup variant="flush">
                 {product.reviews &&
                   product.reviews.map((review) => (
@@ -262,11 +267,6 @@ const ProductScreen = ({ history, match }) => {
                         </Button>
                       </Form>
                     </>
-                  )}
-                  {!userInfo && (
-                    <Message>
-                      Please <Link to="/login">sign in</Link> to write a review
-                    </Message>
                   )}
                 </ListGroup.Item>
               </ListGroup>
