@@ -33,7 +33,7 @@ const UserListScreen = ({ history }) => {
   };
 
   const getEditAccess = (userRoleID) => {
-    if (userInfo.role_id > userRoleID) {
+    if (userInfo.role_id >= userRoleID) {
       return false;
     }
     return true;
