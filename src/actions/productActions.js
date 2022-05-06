@@ -1,4 +1,5 @@
 import axios from "../utils/axios";
+import { getAccessToken } from "../utils/localStorage";
 
 import {
   PRODUCT_LIST_REQUEST,
@@ -26,25 +27,15 @@ import {
 
 export const getListProduct =
   (isAdmin, keyword = "", page = 1, limit = 12) =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     try {
       dispatch({ type: PRODUCT_LIST_REQUEST });
-
-      const {
-        userLogin: { userInfo },
-      } = getState();
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.access_token}`,
-        },
-      };
 
       let url = `api/v1/product?keyword=${keyword}&page=${page}&limit=${limit}`;
       if (isAdmin) {
         url = `api/v1/admin/product?keyword=${keyword}&page=${page}&limit=${limit}`;
       }
-      const { data } = await axios.get(url, config);
+      const { data } = await axios.get(url);
       dispatch({
         type: PRODUCT_LIST_SUCCESS,
         payload: data.data || [],
@@ -59,25 +50,15 @@ export const getListProduct =
     }
   };
 
-export const getDetailProduct = (isAdmin, id) => async (dispatch, getState) => {
+export const getDetailProduct = (isAdmin, id) => async (dispatch) => {
   try {
     dispatch({ type: PRODUCT_DETAIL_REQUEST });
-
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
 
     let url = `api/v1/product/${id}`;
     if (isAdmin) {
       url = `api/v1/admin/product/${id}`;
     }
-    const { data } = await axios.get(url, config);
+    const { data } = await axios.get(url);
     dispatch({ type: PRODUCT_DETAIL_SUCCESS, payload: data.data || {} });
   } catch (error) {
     console.log(error.response.data.message || error.message);
@@ -88,23 +69,11 @@ export const getDetailProduct = (isAdmin, id) => async (dispatch, getState) => {
   }
 };
 
-export const deleteProduct = (id) => async (dispatch, getState) => {
+export const deleteProduct = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: PRODUCT_DELETE_REQUEST,
-    });
+    dispatch({ type: PRODUCT_DELETE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    await axios.delete(`/api/v1/admin/product/${id}`, config);
+    await axios.delete(`/api/v1/admin/product/${id}`);
 
     dispatch({
       type: PRODUCT_DELETE_SUCCESS,
@@ -118,27 +87,13 @@ export const deleteProduct = (id) => async (dispatch, getState) => {
   }
 };
 
-export const createProduct = (product) => async (dispatch, getState) => {
+export const createProduct = (product) => async (dispatch) => {
   try {
-    dispatch({
-      type: PRODUCT_CREATE_REQUEST,
-    });
+    dispatch({ type: PRODUCT_CREATE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+    await axios.post(`/api/v1/admin/product`, product);
 
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    await axios.post(`/api/v1/admin/product`, product, config);
-
-    dispatch({
-      type: PRODUCT_CREATE_SUCCESS,
-    });
+    dispatch({ type: PRODUCT_CREATE_SUCCESS });
   } catch (error) {
     console.log(error.response.data.message || error.message);
     dispatch({
@@ -148,53 +103,33 @@ export const createProduct = (product) => async (dispatch, getState) => {
   }
 };
 
-export const updateProduct =
-  (productID, product) => async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: PRODUCT_UPDATE_REQUEST,
-      });
-
-      const {
-        userLogin: { userInfo },
-      } = getState();
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.access_token}`,
-        },
-      };
-
-      await axios.put(`/api/v1/admin/product/${productID}`, product, config);
-
-      dispatch({
-        type: PRODUCT_UPDATE_SUCCESS,
-      });
-    } catch (error) {
-      console.log(error.response.data.message || error.message);
-      dispatch({
-        type: PRODUCT_UPDATE_FAIL,
-        payload: error.response.data.message || error.message,
-      });
-    }
-  };
-
-export const createProductReview = (review) => async (dispatch, getState) => {
+export const updateProduct = (productID, product) => async (dispatch) => {
   try {
+    dispatch({ type: PRODUCT_UPDATE_REQUEST });
+
+    const accessToken = getAccessToken();
+    const config = { headers: { Authorization: `Bearer ${accessToken}` } };
+
+    await axios.put(`/api/v1/admin/product/${productID}`, product, config);
+
     dispatch({
-      type: PRODUCT_CREATE_REVIEW_REQUEST,
+      type: PRODUCT_UPDATE_SUCCESS,
     });
+  } catch (error) {
+    console.log(error.response.data.message || error.message);
+    dispatch({
+      type: PRODUCT_UPDATE_FAIL,
+      payload: error.response.data.message || error.message,
+    });
+  }
+};
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
+export const createProductReview = (review) => async (dispatch) => {
+  try {
+    dispatch({ type: PRODUCT_CREATE_REVIEW_REQUEST });
 
-    const config = {
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
+    const accessToken = getAccessToken();
+    const config = { headers: { Authorization: `Bearer ${accessToken}` } };
 
     await axios.post(`/api/v1/review`, review, config);
 

@@ -1,4 +1,5 @@
 import axios from "../utils/axios";
+import { setToken, getAccessToken, clearToken } from "../utils/localStorage";
 
 import {
   USER_LOGIN_FAIL,
@@ -30,9 +31,7 @@ import { ORDER_LIST_MY_RESET } from "../constants/orderConstants";
 
 export const login = (email, password) => async (dispatch) => {
   try {
-    dispatch({
-      type: USER_LOGIN_REQUEST,
-    });
+    dispatch({ type: USER_LOGIN_REQUEST });
 
     const { data } = await axios.post("/api/v1/auth/login", {
       email,
@@ -45,6 +44,11 @@ export const login = (email, password) => async (dispatch) => {
     });
 
     localStorage.setItem("userInfo", JSON.stringify(data.data));
+
+    setToken({
+      accessToken: data.data.access_token || "",
+      refreshToken: data.data.refresh_token || "",
+    });
   } catch (error) {
     console.log(error.response.data.message || error.message);
     dispatch({
@@ -55,6 +59,7 @@ export const login = (email, password) => async (dispatch) => {
 };
 
 export const logout = () => (dispatch) => {
+  clearToken();
   localStorage.removeItem("userInfo");
   localStorage.removeItem("cartItems");
   localStorage.removeItem("shippingAddress");
@@ -69,9 +74,7 @@ export const logout = () => (dispatch) => {
 export const register =
   (email, name, password, confirmPassword) => async (dispatch) => {
     try {
-      dispatch({
-        type: USER_REGISTER_REQUEST,
-      });
+      dispatch({ type: USER_REGISTER_REQUEST });
 
       const { data } = await axios.post("/api/v1/auth/register/customer", {
         email,
@@ -91,6 +94,8 @@ export const register =
       });
 
       localStorage.setItem("userInfo", JSON.stringify(data.data));
+      localStorage.setItem("accessToken", data.data.access_token);
+      localStorage.setItem("refreshToken", data.data.refresh_token);
     } catch (error) {
       console.log(error.response.data.message || error.message);
       dispatch({
@@ -102,28 +107,16 @@ export const register =
 
 export const getUserDetail =
   (isAdmin = false, id = null) =>
-  async (dispatch, getState) => {
+  async (dispatch) => {
     try {
-      dispatch({
-        type: USER_DETAIL_REQUEST,
-      });
-
-      const {
-        userLogin: { userInfo },
-      } = getState();
-
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.access_token}`,
-        },
-      };
+      dispatch({ type: USER_DETAIL_REQUEST });
 
       let url = "/api/v1/user";
       if (isAdmin) {
         url = `/api/v1/admin/user/${id}`;
       }
 
-      const { data } = await axios.get(url, config);
+      const { data } = await axios.get(url);
 
       dispatch({
         type: USER_DETAIL_SUCCESS,
@@ -138,35 +131,23 @@ export const getUserDetail =
     }
   };
 
-export const updateUserProfile = (user) => async (dispatch, getState) => {
+export const updateUserProfile = (user) => async (dispatch) => {
   try {
-    dispatch({
-      type: USER_UPDATE_PROFILE_REQUEST,
-    });
+    dispatch({ type: USER_UPDATE_PROFILE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    const { data } = await axios.patch("/api/v1/user/profile", user, config);
+    const { data } = await axios.patch("/api/v1/user/profile", user);
 
     dispatch({
       type: USER_UPDATE_PROFILE_SUCCESS,
       payload: data.data || [],
     });
 
-    // dispatch({
-    //   type: USER_LOGIN_SUCCESS,
-    //   payload: data.data || {},
-    // });
+    dispatch({
+      type: USER_LOGIN_SUCCESS,
+      payload: data.data || {},
+    });
 
-    // localStorage.setItem("userInfo", JSON.stringify(data));
+    localStorage.setItem("userInfo", JSON.stringify(data));
   } catch (error) {
     console.log(error.response.data.message || error.message);
     dispatch({
@@ -176,23 +157,13 @@ export const updateUserProfile = (user) => async (dispatch, getState) => {
   }
 };
 
-export const getUserList = () => async (dispatch, getState) => {
+export const getUserList = () => async (dispatch) => {
   try {
     dispatch({
       type: USER_LIST_REQUEST,
     });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    const { data } = await axios.get("/api/v1/admin/user", config);
+    const { data } = await axios.get("/api/v1/admin/user");
 
     dispatch({
       type: USER_LIST_SUCCESS,
@@ -207,23 +178,11 @@ export const getUserList = () => async (dispatch, getState) => {
   }
 };
 
-export const deleteUser = (id) => async (dispatch, getState) => {
+export const deleteUser = (id) => async (dispatch) => {
   try {
-    dispatch({
-      type: USER_DELETE_REQUEST,
-    });
+    dispatch({ type: USER_DELETE_REQUEST });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    await axios.delete(`/api/v1/admin/user/${id}`, config);
+    await axios.delete(`/api/v1/admin/user/${id}`);
 
     dispatch({ type: USER_DELETE_SUCCESS });
   } catch (error) {
@@ -235,27 +194,13 @@ export const deleteUser = (id) => async (dispatch, getState) => {
   }
 };
 
-export const updateUser = (userID, user) => async (dispatch, getState) => {
+export const updateUser = (userID, user) => async (dispatch) => {
   try {
     dispatch({
       type: USER_UPDATE_REQUEST,
     });
 
-    const {
-      userLogin: { userInfo },
-    } = getState();
-
-    const config = {
-      headers: {
-        Authorization: `Bearer ${userInfo.access_token}`,
-      },
-    };
-
-    const { data } = await axios.patch(
-      `/api/v1/admin/user/${userID}`,
-      user,
-      config
-    );
+    const { data } = await axios.patch(`/api/v1/admin/user/${userID}`, user);
 
     dispatch({ type: USER_UPDATE_SUCCESS });
 
