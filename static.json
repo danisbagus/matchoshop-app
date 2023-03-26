@@ -9,10 +9,10 @@
     },
     "proxies": {
       "/api/": {
-        "origin": "${API_URL}/api"
+        "origin": "https://matchoshop.up.railway.app/api" 
       },
       "/auth/": {
-        "origin": "${API_URL}/auth"
+        "origin": "https://matchoshop.up.railway.app/auth"
       }
     }
   }
